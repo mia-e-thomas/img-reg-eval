@@ -1,0 +1,77 @@
+dataset:
+    filepath: datasets/multipoint_data/test.hdf5 # *Relative* Path
+    index: 1500      # Image pair index in the dataset
+    subindex: [0,1]  # If > 2 images in set, which two to match
+    flip: True       # If true, will randomly choose which of the 2 images is warped
+    scientific_notation: False
+
+features:
+    # Transform estimation
+    min_matches: 4
+
+    # ----------------------------------------------------
+    # METHOD OPTIONS: (i) 'orb', (ii) 'sift', (iii) 'lghd'
+    # Note: Under 'kwargs: ', put any *non-default* values for keyword arguments
+    # ----------------------------------------------------
+    # (i) ORB
+    method: 'orb' 
+    #kwargs:       
+    #     nfeatures: 400
+    #     edgeThreshold: 31
+    #     patchSize: 31
+    #     fastThreshold: 20
+     
+    # (ii) SIFT
+    #method: 'sift' 
+    #kwargs:       
+         #nfeatures: 400
+         #contrastThreshold: 0.12
+         #edgeThreshold: 20
+     
+    # (iii) LGHD
+    #method: 'lghd' 
+    #kwargs:       
+    #     H: 512 # REQUIRED
+    #     W: 640 # REQUIRED
+    #     patch_size: 40
+    # ----------------------------------------------------
+
+matching:
+    # -----------------------------------------------------------------------------------------------------
+    # METHOD OPTIONS: (i) 'bf' (brute force), (ii) 'flann' (Fast Library for Approximate Nearest Neighbors)
+    # Note: Under 'kwargs: ', put any *non-default* values for keyword arguments
+    # -----------------------------------------------------------------------------------------------------
+
+    # (i) Brute Force
+    method: 'bf' 
+    kwargs:  
+        crossCheck: True
+        normType: 4  # NORM_L1 = 2, NORM_L2 = 4, NORM_HAMMING = 6, NORM_HAMMING2 = 7
+
+    # (ii) FLANN
+    #method: 'flann' 
+    #kwargs: 
+    #    indexParams: 
+    #        algorithm: 1
+    #        trees: 5     
+    #    searchParams: 
+    #        #checks: 50        
+    # -----------------------------------------------------------------------------------------------------
+
+    # Perform ratio test? (cannot also be done with crossCheck = True)
+    ratio_test: False   # Boolean
+    ratio: 0.75        # Ratio for ratio test
+
+    # Apply Ransac when estimating homography
+    ransac: True  # Boolean
+
+evaluation:
+
+    repeatability: 
+        threshold: 4   # 4 is standard in literature
+
+    m_score: 
+        threshold: 4   
+
+    homography: 
+        thresholds: [2,5,10,20,50]  # LIST of thresholds to test (multipoint does 2,5,10)
